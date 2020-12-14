@@ -11,35 +11,41 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 const isnullorUndefined = (val) => {
   return;
-  val == null || val == undefined;
+  val === null || val === undefined;
 };
 app.get("/newFeeds", async (req, res) => {
-  try {
-    const limit = req.body.limit;
-    const offset = req.body.offset;
+  const limit = req.body.limit;
+  const offset = req.body.offset;
 
-    if (isnullorUndefined(limit) && isnullorUndefined(offset)) {
-      const data = await newsArticleModel.find().skip().limit(10);
-      res.send(data);
-    }
+  if (isnullorUndefined(limit) && isnullorUndefined(offset)) {
+    const data = await newsArticleModel.find().skip().limit(10);
+    res.send(data);
+  }
+  if (!isnullorUndefined(limit) || !isnullorUndefined(offset)) {
     if (!isnullorUndefined(limit) && !isnullorUndefined(offset)) {
       const data = await newsArticleModel.find().skip(offset).limit(limit);
       res.send(data);
     }
-    // if (!isnullorUndefined(limit)) {
-    //   const data = await newsArticleModel.find().skip(offset).limit(limit);
-    //   res.send(data);
-    // }
-    // if (!isnullorUndefined(offset)) {
-    //   const data = await newsArticleModel
-    //     .find()
-    //     .skip(offset)
-    //     .limit(onePageArticleCount);
-    //   res.send(data);
-    // }
-  } catch (error) {
-    console.log("error at", error);
+    if (!isnullorUndefined(limit)) {
+      const data = await newsArticleModel.find().skip().limit(limit);
+      res.send(data);
+    }
+    if (!isnullorUndefined(offset)) {
+      const data = await newsArticleModel.find().skip(offset).limit(10);
+      res.send(data);
+    }
   }
+  // if (!isnullorUndefined(limit)) {
+  //   const data = await newsArticleModel.find().skip(offset).limit(limit);
+  //   res.send(data);
+  // }
+  // if (!isnullorUndefined(offset)) {
+  //   const data = await newsArticleModel
+  //     .find()
+  //     .skip(offset)
+  //     .limit(onePageArticleCount);
+  //   res.send(data);
+  // }
 });
 app.listen(port, () => console.log(`App listening on port ${port}!`));
 
