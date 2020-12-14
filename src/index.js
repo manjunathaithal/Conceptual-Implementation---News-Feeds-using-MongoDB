@@ -10,7 +10,8 @@ const onePageArticleCount = 10;
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 const isnullorUndefined = (val) => {
-  return val == null || val == undefined;
+  return;
+  val == null || val == undefined;
 };
 app.get("/newFeeds", async (req, res) => {
   try {
@@ -23,6 +24,7 @@ app.get("/newFeeds", async (req, res) => {
     }
     if (!isnullorUndefined(limit) && !isnullorUndefined(offset)) {
       const data = await newsArticleModel.find().skip(offset).limit(limit);
+      res.send(data);
     }
     if (!isnullorUndefined(limit)) {
       const data = await newsArticleModel.find().skip(offset).limit(limit);
